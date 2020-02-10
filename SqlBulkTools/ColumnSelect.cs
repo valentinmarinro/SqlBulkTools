@@ -107,11 +107,8 @@ namespace SqlBulkTools
         /// If any of your model property names do not match 
         /// the SQL table column(s) as defined in given table, then use this method to set up a custom mapping.  
         /// </summary>
-        /// <param name="source">
-        /// The object member that has a different name in SQL table. 
-        /// </param>
-        /// <param name="destination">
-        /// The actual name of column as represented in SQL table. 
+        /// <param name="customMappings">
+        /// Custom mapping dictonary
         /// </param>
         /// <returns></returns>
         public ColumnSelect<T> CustomColumnMapping(Dictionary<Expression<Func<T, object>>, string> customMappings)

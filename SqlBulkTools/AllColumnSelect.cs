@@ -89,6 +89,25 @@ namespace SqlBulkTools
         }
 
         /// <summary>
+        /// By default SqlBulkTools will attempt to match the model property names to SQL column names (case insensitive). 
+        /// If any of your model property names do not match 
+        /// the SQL table column(s) as defined in given table, then use this method to set up a custom mapping.  
+        /// </summary>
+        /// <param name="customMappings">
+        /// Custom mapping dictonary
+        /// </param>
+        /// <returns></returns>
+        public AllColumnSelect<T> CustomColumnMapping(Dictionary<Expression<Func<T, object>>, string> customMappings)
+        {
+            foreach (var item in customMappings)
+            {
+                var propertyName = _helper.GetPropertyName(item.Key);
+                CustomColumnMappings.Add(propertyName, item.Value);
+            }
+            return this;
+        }
+
+        /// <summary>
         /// Disables non-clustered index. You can select One to Many non-clustered indexes. This option should be considered on 
         /// a case-by-case basis. Understand the consequences before using this option.  
         /// </summary>
