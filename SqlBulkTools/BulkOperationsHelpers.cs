@@ -38,8 +38,8 @@ namespace SqlBulkTools
                 actualColumns.Add(row["COLUMN_NAME"].ToString(), row["DATA_TYPE"].ToString());
 
                 if (columnType == "varchar" || columnType == "nvarchar" || 
-                    columnType == "char" || columnType == "binary" || 
-                    columnType == "varbinary")
+                    columnType == "char" || columnType == "nchar" || 
+                    columnType == "binary" || columnType == "varbinary")
 
                 {
                     actualColumnsMaxCharLength.Add(row["COLUMN_NAME"].ToString(),
@@ -69,10 +69,18 @@ namespace SqlBulkTools
                 if (column == "InternalId")
                     continue;
                 string columnType;
+                string simpleColumnType = string.Empty;
                 if (actualColumns.TryGetValue(column, out columnType))
                 {
+                    simpleColumnType = columnType;
                     columnType = GetVariableCharType(column, columnType, actualColumnsMaxCharLength);
                     columnType = GetDecimalPrecisionAndScaleType(column, columnType, actualColumnsPrecision);
+                }
+
+                if (simpleColumnType == "varchar" || simpleColumnType == "nvarchar" ||
+                    simpleColumnType == "char" || simpleColumnType == "nchar")
+                {
+                    columnType = columnType + " COLLATE SQL_Latin1_General_CP1_CI_AS ";
                 }
 
                 paramList.Add("[" + column + "]" + " " + columnType);
